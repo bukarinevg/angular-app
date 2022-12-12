@@ -1,0 +1,49 @@
+<h1 mat-dialog-title>Buffer-ID {{buffer_id }}</h1>
+<form mat-dialog-conten [formGroup]="data" (ngSubmit)="onSubmit(data)">
+
+    <div mat-dialog-content>
+        <mat-form-field>
+            <input matInput placeholder="Имя поля" formControlName="fld_name" value="">
+        </mat-form-field>
+    </div>
+    <div mat-dialog-content>
+        <mat-form-field>
+            <input matInput placeholder="Имя поля из источника" formControlName="source_fld_name" value="">
+            
+
+        </mat-form-field>
+    </div>
+    <div mat-dialog-content>
+        <mat-form-field appearance="fill">
+            <mat-label>Тип поля</mat-label>
+            <mat-select formControlName="fld_type">
+                <mat-option value='number'>Число</mat-option>
+                <mat-option value='string'>Строка</mat-option>
+                <mat-option value='date'>Дата</mat-option>
+                <mat-option value='array'>Массив</mat-option>
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+    <div mat-dialog-content>
+        <mat-form-field appearance="fill">
+            <mat-label>Ключевое поле</mat-label>
+            <mat-select formControlName="key_field">
+                <mat-option value='1'>Да</mat-option>
+                <mat-option value='0'>Нет</mat-option>
+
+            </mat-select>
+        </mat-form-field>
+    </div>
+
+  
+
+    <mat-error *ngIf="error" class="alert alert-danger">{{ error }}</mat-error>
+
+
+    <mat-dialog-actions>
+        <button mat-raised-button type="submit" color="primary">Сохранить</button>
+        <button mat-raised-button type="button" color="accent" mat-dialog-close>Отмена</button>
+
+    </mat-dialog-actions>
+</form>

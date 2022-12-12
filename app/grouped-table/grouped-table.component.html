@@ -1,0 +1,68 @@
+<div class="mat-elevation-z">
+
+  <table mat-table [dataSource]="dataSource" matSort>
+
+    <!-- Формируем таблицу -->
+    <ng-container *ngFor="let column of columns; let i = index" matColumnDef="{{ column.field }}">
+      
+
+      <div *ngIf="(column.field=='edit')">
+          <mat-header-cell *matHeaderCellDef >
+          <button type="button" aria-label="Добавить" mat-icon-button (click)="addcrud()">
+            <mat-icon aria-label="Добавить">add</mat-icon>
+          </button>
+        </mat-header-cell>
+      </div>
+      <!-- Задаем заголовки-->
+      <div *ngIf="!(column.field=='edit')">
+        <mat-header-cell *matHeaderCellDef mat-sort-header>
+        
+          <span class="header-table">{{ displayedColumnsName[i] }}</span>
+        
+        </mat-header-cell>
+      </div> 
+      <!-- Формируем контент-->
+      <mat-cell *matCellDef="let row" [ngClass]="{
+                'positive' : column.field=='fld_cnt' && row[column.field] > 0 ,
+                'negative' : column.field=='fld_cnt' && row[column.field] <= 0}"
+                >
+        
+     <div *ngIf="!(column.field=='edit') && !(column.field=='fld_cnt')"> {{row[column.field] }} </div>
+        
+        <div *ngIf="(column.field=='edit')">
+         <button type="button" aria-label="Изменить" mat-icon-button (click)="editcrud(row)">
+            <mat-icon aria-label="Изменить">edit</mat-icon>
+          </button> 
+        </div>
+
+        <div *ngIf="(column.field=='fld_cnt')"> 
+          <button type="button" aria-label="Поля" mat-icon-button  (click)="fld_cnt_row(row)">
+            <mat-icon aria-label="Поля">list</mat-icon>
+          </button> 
+        </div>
+
+      </mat-cell>
+
+    </ng-container>
+
+    <!-- Объявление заголовков таблицы -->
+    <mat-header-row mat-header-row *matHeaderRowDef="displayedColumns"></mat-header-row>
+    <!-- Объявление контента таблицы -->
+    <mat-row *matRowDef="let row; columns: displayedColumns;"></mat-row>
+
+    <!-- Group header -->
+    <!-- <ng-container matColumnDef="groupHeader">
+        <mat-cell [style.textIndent.px]="(group.level-1)*20" colspan="999" *matCellDef="let group">
+          <mat-icon *ngIf="group.expanded">expand_less</mat-icon>
+          <mat-icon *ngIf="!group.expanded">expand_more</mat-icon>
+          <strong>{{groupByColumns[group.level-1]}} = {{group[groupByColumns[group.level-1]]}}
+            ({{group.totalCounts}})</strong>
+        </mat-cell>
+      </ng-container> 
+
+      <mat-row *matRowDef="let row; columns: ['groupHeader']; when: isGroup" (click)="groupHeaderClick(row)"> </mat-row>-->
+
+  </table>
+  <mat-paginator [pageSize]="25" [pageSizeOptions]="[10, 25, 50, 100, 200]">
+  </mat-paginator>
+</div>

@@ -1,0 +1,22 @@
+<div class="mat-elevation-z8">
+    <div class="loading-shade"
+         *ngIf="isLoadingResults">
+      <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+<mat-card>
+  <mat-card-content>
+    <mat-list>
+      <mat-list-item>
+        <mat-form-field fxFlex="80%">
+          <input matInput type="text" [(ngModel)]="filter" placeholder="Фильтр">
+        </mat-form-field>
+      </mat-list-item>
+      <br>
+      <br>
+    </mat-list>
+    
+    <!-- ВЫЗОВ КОМПОНЕНТА -->
+    <app-grouped-table [_dataSource]="dataValue" [_columns]="columnsValue" [_filter]="filterValue" (addcrudclick)="addService()" (editcrudclick)="editclick($event)" (fldclick)="servFldC1lick($event)"> </app-grouped-table>
+  </mat-card-content>
+</mat-card>
+</div>

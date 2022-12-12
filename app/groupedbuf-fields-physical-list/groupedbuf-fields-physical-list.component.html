@@ -1,0 +1,16 @@
+<div class="mat-elevation-z8">
+    <div class="loading-shade" *ngIf="isLoadingResults">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+
+    <mat-card>
+        <mat-card-content>
+            <div id='head'> 
+                <span class="head-id"> ID буффера - {{ buff_id }} </span>
+                
+            </div>
+            
+            <app-grouped-table [_dataSource]="dataValue" [_columns]="columnsValue" [_filter]="filterValue" (addcrudclick)="addService()" (editcrudclick)="editclick($event)"> </app-grouped-table>
+        </mat-card-content>
+    </mat-card>
+</div>

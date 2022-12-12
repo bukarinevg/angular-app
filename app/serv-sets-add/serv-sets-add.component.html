@@ -1,0 +1,134 @@
+<div class="mat-elevation-z8">
+    <div class="loading-shade" *ngIf="isLoadingResults">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <form [formGroup]="ServiceSet" (ngSubmit)="onSubmit()">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>Сервис</mat-card-title>
+            </mat-card-header>
+            <mat-card-content>
+
+                <mat-form-field>
+                    <input matInput placeholder="Имя сервиса" formControlName="service_name" value="">
+                    <mat-error *ngIf="ServiceSet.controls.service_name.invalid">Введите Имя сервиса
+                    </mat-error>
+
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Имя коллекции" formControlName="collection_name" value="">
+                    <mat-error *ngIf="ServiceSet.controls.collection_name.invalid">Введите Имя коллекции
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Описание</mat-label>
+                    <textarea matInput formControlName="note"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-select required formControlName="cache_type" (selectionChange)="on_change_type($event)">
+                        <mat-option value=1>1 - Короткая буферизация</mat-option>
+                        <mat-option value=2>2 - Обновляемая буферизация</mat-option>
+                        <mat-option value=3>3 - Групповой буфер</mat-option>
+                    </mat-select>
+                    <mat-label>Тип буферизации</mat-label>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Адрес сервиса" formControlName="cache_server_url" value="">
+                    <mat-error *ngIf="ServiceSet.controls.cache_server_url.invalid">Введите Адрес сервиса
+                    </mat-error>
+
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput placeholder="Адрес источника" formControlName="source_url" value="">
+                    <mat-error *ngIf="ServiceSet.controls.source_url.invalid">Введите Адрес источника
+                    </mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-select formControlName="source_buffer_id"
+                        [disabled]="ServiceSet.controls.cache_type.value !== '3'">
+                        <mat-option *ngFor="let buff of bufferlist" [value]="buff.buffer_id.toString()">
+                            {{ buff.buffer_name }}
+                        </mat-option>
+                    </mat-select>
+                    <mat-label>Номер буфера</mat-label>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Время жизни</mat-label>
+                    <input matInput type="number" placeholder="Время жизни" formControlName="life_time" min="10"
+                        max="1440">
+                    <span matSuffix>Мин</span>
+                    <mat-error *ngIf="ServiceSet.controls.life_time.invalid">Минимум чего то</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Период обновления</mat-label>
+                    <input matInput type="number" placeholder="Период обновления" formControlName="refresh_time"
+                        min="10" max="1440">
+                    <span matSuffix>Мин</span>
+                    <mat-error *ngIf="ServiceSet.controls.refresh_time.invalid">Минимум чего то</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Кол-во обновлений</mat-label>
+                    <input matInput type="number" placeholder="Кол-во обновлений" formControlName="refresh_count"
+                        min="1" max="100">
+                    <span matSuffix></span>
+                    <mat-error *ngIf="ServiceSet.controls.refresh_count.invalid">Минимум чего то</mat-error>
+                </mat-form-field>
+                <!--mat-form-field appearance="fill">
+                    <mat-label>Кол-во обновлений</mat-label>
+                    <input matInput type="number" placeholder="status" formControlName="blo_status"
+                        min="1" max="100">
+                    <span matSuffix></span>
+                    <mat-error *ngIf="ServiceSet.controls.refresh_count.invalid">Минимум чего то</mat-error>
+                </mat-form-field-->
+                <mat-form-field appearance="fill">
+
+                    <mat-select required formControlName="blocked_status">
+                        <mat-option value=0 *ngIf="fields"> Активен </mat-option>
+                        <mat-option value=1> Блокирован </mat-option>
+                    </mat-select>
+                    <mat-label>Статус</mat-label>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Дата последней смены статуса сервиса</mat-label>
+                    <input matInput type="text" placeholder="Дата блокировки" formControlName="blocked_date" min="1"
+                        max="100" readonly>
+                    <span matSuffix></span>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Учетная запись, под которой выполнено
+                        изменение статуса сервиса.
+                    </mat-label>
+                    <input matInput type="text" placeholder="Учетная запись, под которой выполнено изменение сервиса."
+                        formControlName="modified_account" min="1" max="100" readonly>
+                    <span matSuffix></span>
+                    <mat-error *ngIf="ServiceSet.controls.refresh_count.invalid">Минимум чего то</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Дата модификации</mat-label>
+                    <input matInput type="text" placeholder="Дата модификации" formControlName="modified_date" min="1"
+                        max="100" readonly>
+                    <span matSuffix></span>
+                    <mat-error *ngIf="ServiceSet.controls.refresh_count.invalid">Минимум чего то</mat-error>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>
+                        Учетная запись, под которой выполнено
+                        изменение сервиса.
+                    </mat-label>
+                    <input matInput type="text" placeholder="Учетная запись, под которой выполнено изменение сервиса."
+                        formControlName="modified_account" min="1" max="100" readonly>
+                    <span matSuffix></span>
+                    <mat-error *ngIf="ServiceSet.controls.refresh_count.invalid">Минимум чего то</mat-error>
+                </mat-form-field>
+                <mat-error *ngIf="error" class="alert alert-danger">{{ error }}</mat-error>
+            </mat-card-content>
+            <mat-card-actions>
+
+
+            </mat-card-actions>
+            <button mat-raised-button type="submit" color="primary">Сохранить</button>
+            <button mat-raised-button type="button" color="warn" (click)="undo()"> Отменить</button>
+            <button mat-raised-button type="button" (click)="onServFldClick()"
+                [ngStyle]="{'background-color':fld_cnt_color}" *ngIf="serv_id != null">Доступные поля</button>
+        </mat-card>
+    </form>

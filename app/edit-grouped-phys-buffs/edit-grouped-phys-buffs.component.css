@@ -1,0 +1,36 @@
+:host {
+    display: flex;
+    justify-content: center;
+  }
+  
+
+  mat-divider{
+    max-width: 640px;
+  }
+
+  mat-card-content{
+    margin-top: 2em;
+  }
+  .mat-card {
+    width: 800px;
+    margin: 50px;
+  }
+  
+  mat-form-field {
+      width: 80%;
+  }
+  
+  .alert-danger {
+      background-color: #f44336; /* Red */
+  }
+  .alert {
+    padding: 20px;
+    color: white;
+    margin-bottom: 15px;
+    text-align: center;
+  }
+  button {margin-left: 20px;}
+  .all_buttons{
+    background-color: dimgray;
+  }
+  #editinterval {margin-left: -10px;}

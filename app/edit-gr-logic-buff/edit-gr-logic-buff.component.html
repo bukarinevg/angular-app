@@ -1,0 +1,86 @@
+<div class="mat-elevation-z8">
+    <div class="loading-shade" *ngIf="isLoadingResults">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <form [formGroup]="BufferSettings" (ngSubmit)="onSubmit()">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>ID буфера - {{buffer_id}}</mat-card-title>
+
+            </mat-card-header>
+
+            <mat-card-content>
+                <mat-error style="display: none;" *ngIf="BufferSettings.controls.buffer_name.invalid">Введите имя
+                    буффера
+                </mat-error>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Имя буфера. </mat-label>
+                    <input matInput placeholder="Имя" formControlName="buffer_name" value="">
+                    <mat-error *ngIf="BufferSettings.controls.buffer_name.invalid">Введите имя буффера
+                    </mat-error>
+
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-select required formControlName="buffer_type" >
+                        <mat-option value=2 >Логический</mat-option>
+                    </mat-select>
+                    <mat-label>Тип буфера</mat-label>
+                    <mat-error *ngIf="BufferSettings.controls.buffer_type.invalid">Введите тип буфера
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill" >
+                    <mat-label>Имя источника.</mat-label>
+                    <input matInput placeholder="Имя источника" formControlName="source_name" value="">
+                </mat-form-field>
+
+                   
+                <mat-form-field appearance="fill">
+                    <mat-label>Описание</mat-label>
+                    <textarea matInput formControlName="note"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Cтатус</mat-label>
+                    <mat-select formControlName="blocked">
+                        <mat-option value=0 *ngIf="fields"> Активен </mat-option>
+                        <mat-option value=1> Блокирован </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Дата изменения статуса</mat-label>
+                    <input matInput type="text" placeholder="Дата изменения статуса" formControlName="blocked_date"
+                        readonly>
+                    <span matSuffix></span>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Дата модификации</mat-label>
+                    <input matInput type="text" placeholder="Дата модификации" formControlName="modified_date" min="1"
+                        max="100" readonly>
+                    <span matSuffix></span>
+
+                </mat-form-field>
+
+                                <mat-form-field appearance="fill">
+                    <mat-label>
+                        Учетная запись, под которой выполнено
+                        изменение сервиса.
+                    </mat-label>
+                    <input matInput type="text" placeholder="Учетная запись, под которой выполнено изменение сервиса."
+                        formControlName="modified_account" min="1" max="100" readonly>
+                    <span matSuffix></span>
+
+                </mat-form-field>
+                <mat-error *ngIf="error" class="alert alert-danger">{{ error }}</mat-error>
+            </mat-card-content>
+            <mat-card-actions>
+
+
+            </mat-card-actions>
+            <button mat-raised-button type="submit" color="primary">Сохранить</button>
+            <button mat-raised-button type="button" color="warn" (click)="undo()"> Отменить</button>
+            <button mat-raised-button type="button" (click)="onServFldClick()"
+                [ngStyle]="{'background-color':fld_cnt_color}" *ngIf="buffer_id != null">Доступные поля</button>
+        </mat-card>
+    </form>

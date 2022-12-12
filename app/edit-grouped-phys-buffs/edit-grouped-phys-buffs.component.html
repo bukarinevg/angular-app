@@ -1,0 +1,174 @@
+<div class="mat-elevation-z8">
+    <div class="loading-shade" *ngIf="isLoadingResults">
+        <mat-spinner *ngIf="isLoadingResults"></mat-spinner>
+    </div>
+    <form [formGroup]="BufferSettings" (ngSubmit)="onSubmit()">
+        <mat-card>
+            <mat-card-header>
+                <mat-card-title>ID буфера - {{buffer_id}}</mat-card-title>
+
+            </mat-card-header>
+
+            <mat-card-content>
+                <mat-error style="display: none;" *ngIf="BufferSettings.controls.buffer_name.invalid">Введите имя
+                    буффера
+                </mat-error>
+
+                <mat-form-field appearance="fill">
+                    <mat-label>Имя буфера. </mat-label>
+                    <input matInput placeholder="Имя" formControlName="buffer_name" value="">
+                    <mat-error *ngIf="BufferSettings.controls.buffer_name.invalid">Введите имя буффера
+                    </mat-error>
+
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-select required formControlName="buffer_type" readonly>
+                        <mat-option value=1 default>Физический</mat-option>
+                    </mat-select>
+                    <mat-label>Тип буфера</mat-label>
+                    <mat-error *ngIf="BufferSettings.controls.buffer_type.invalid">Введите тип буфера
+                    </mat-error>
+                </mat-form-field>
+
+                <mat-form-field appearance="fill">
+                    <mat-select required formControlName="source_type" (ngModelChange)="check_avail_flds()">
+                        <mat-option value=1>База данных</mat-option>
+                        <mat-option value=2>REST API</mat-option>
+                        <mat-option value=3>Не обновляется</mat-option>
+                    </mat-select>
+                    <mat-label>Cпособ обновления</mat-label>
+                    <mat-error *ngIf="BufferSettings.controls.buffer_type.invalid">Введите способ обновления
+                    </mat-error>
+                </mat-form-field>
+
+                <div *ngIf="update_setting">
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Имя источника.</mat-label>
+                        <input matInput placeholder="Имя источника" formControlName="source_name" value="">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>ID учетной записи.</mat-label>
+                        <mat-select required formControlName="acc_id">
+                            <mat-option [value]="acc.acc_id.toString()" *ngFor="let acc of accounts"> {{acc.login}}</mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Тип синхронизации .</mat-label>
+                        <mat-select matInput placeholder="Тип синхронизации "  formControlName="sync_type"  (ngModelChange)="check_avail_flds()">
+                            <mat-option value = "-1"> Инкрементальная </mat-option>
+                            <mat-option value = "0">  Полная </mat-option>
+                            <mat-option value = '1'> Смешанная </mat-option>
+                        </mat-select>
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill" *ngIf="mixed_sync_type">
+                        <mat-label>Значение смешанной синхронизации.</mat-label>
+                        <input matInput placeholder="Имя процедуры полной синхронизации" formControlName="mixed_sync_value"
+                            value="">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Имя процедуры полной синхронизации.</mat-label>
+                        <input matInput placeholder="Имя процедуры полной синхронизации" formControlName="full_sync"
+                            value="">
+                    </mat-form-field>
+                    <!-- <mat-form-field appearance="fill">
+                    <mat-label>Описание</mat-label>
+                    <textarea matInput formControlName="note"></textarea>
+                </mat-form-field>-->
+                    <mat-form-field *ngIf="interval"  appearance="fill">
+                        <mat-label>Разрешенный интервал полной синхронизации.</mat-label><button id="editinterval" type="button" aria-label="Изменить" mat-icon-button (click)="editIntervals()">
+                            <mat-icon  aria-label="Изменить">edit</mat-icon>
+                        </button>
+                        
+                        <textarea  cdkTextareaAutosize matInput formControlName="text_allow_interval" readonly></textarea>
+                    </mat-form-field>
+                    <input matInput  formControlName="full_sync_allow_interval" hidden>
+               <!--     <mat-form-field appearance="fill">
+                        <mat-label>Разрешенный интервал полной синхронизации.</mat-label>
+                        <mat-select required>
+                            <mat-option [value]='' *ngFor="let interval of full_sync_allow_interval"> {{interval}}
+                            </mat-option>
+                            <mat-option (click)="editIntervals()">
+                                <mat-icon matSuffix>edit</mat-icon> Добавить/удалить интервал
+                            </mat-option>
+                        </mat-select>
+
+                    </mat-form-field>
+-->
+                    <mat-form-field appearance="fill">
+                    <mat-label>Имя процедуры инкрементальной синхронизации.</mat-label>
+                    <input matInput  placeholder="Имя процедуры инкрементальной синхронизации."
+                     formControlName="inc_sync" value="">
+                   
+                    </mat-form-field>
+
+                
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Задержка повторной синхронизации (мин) .</mat-label>
+                        <input matInput placeholder="Задержка повторной синхронизации (мин)" type="number"
+                            formControlName="sync_error_delay" value="">
+                    </mat-form-field>
+
+                    <mat-form-field appearance="fill">
+                        <mat-label>Периодичность запуска синхронизаций (мин) .</mat-label>
+                        <input matInput type='number' placeholder="Периодичность запуска синхронизаций (мин)."
+                            formControlName="sync_interval" value="">
+                        <span matSuffix>Мин</span>
+                    </mat-form-field>
+                </div>
+                <mat-form-field appearance="fill">
+                    <mat-label>Описание</mat-label>
+                    <textarea matInput formControlName="note"></textarea>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Cтатус</mat-label>
+                    <mat-select formControlName="blocked">
+                        <mat-option value=0 *ngIf="fields"> Активен </mat-option>
+                        <mat-option value=1> Блокирован </mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Дата изменения статуса</mat-label>
+                    <input matInput type="text" placeholder="Дата изменения статуса" formControlName="blocked_date"
+                        readonly>
+                    <span matSuffix></span>
+                </mat-form-field>
+                <mat-form-field appearance="fill">
+                    <mat-label>Дата модификации</mat-label>
+                    <input matInput type="text" placeholder="Дата модификации" formControlName="modified_date" min="1"
+                        max="100" readonly>
+                    <span matSuffix></span>
+
+                </mat-form-field>
+
+
+
+                <mat-form-field appearance="fill">
+                    <mat-label>
+                        Учетная запись, под которой выполнено
+                        изменение сервиса.
+                    </mat-label>
+                    <input matInput type="text" placeholder="Учетная запись, под которой выполнено изменение сервиса."
+                        formControlName="modified_account" min="1" max="100" readonly>
+                    <span matSuffix></span>
+
+                </mat-form-field>
+                <mat-error *ngIf="error" class="alert alert-danger">{{ error }}</mat-error>
+            </mat-card-content>
+            <mat-card-actions>
+
+
+            </mat-card-actions>
+            <button class="all_buttons" mat-raised-button type="submit" color="primary">Сохранить</button>
+            <button class="all_buttons" mat-raised-button type="button" color="warn" (click)="undo()"> Отменить</button>
+            <button class="all_buttons" mat-raised-button type="button" (click)="onServFldClick()"
+                [ngStyle]="{'background-color':fld_cnt_color}" *ngIf="buffer_id != null">Доступные поля</button>
+        </mat-card>
+    </form>
